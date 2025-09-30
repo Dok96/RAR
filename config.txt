@@ -7,15 +7,21 @@ dist_report_pdf = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\pdf
 dist_report_xlsx = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\xlsx
 
 #==PLC==
-plc_ip = 192.168.0.2
+plc_ip = 192.168.117.128
 rack = 0
 slot = 2
 retry_delay = 5
 
-db_number = 5
+db_number = 7
 
-offset_len = 0 # размещения тега длины
-offset_trigger = 4 # размещение тега триггера
+# размещения тега длины
+offset_len = 0
+
+# размещение тега триггера
+offset_trigger = 4
+
+# время опроса тегов (секунды)
+time_tag =0.2
 
 
 

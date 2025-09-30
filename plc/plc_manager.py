@@ -4,7 +4,7 @@ import snap7
 from plc_read.plcReadLen import read_len
 from plc_read.plcReadTrig import read_trigger_def
 from plc_read.resetTrig import res_trigger
-from config import plc_ip, rack,slot
+from config import plc_ip, rack,slot, time_tag
 
 class PlcManager:
     def __init__(self):
@@ -57,7 +57,7 @@ class PlcManager:
         try:
             while self.running:
                 self.read_data()
-                time.sleep(0.2)  # Частота опроса ПЛК (5 Гц)
+                time.sleep(time_tag)  # Частота опроса ПЛК (5 Гц)
         except Exception as e:
             print(f"❌ Ошибка в потоке чтения ПЛК: {e}")
         finally:

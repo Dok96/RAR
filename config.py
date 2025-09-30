@@ -72,10 +72,17 @@ slot = config.get("slot")
 retry_delay = config.get("retry_delay", 5)
 
 #==message (длина и тригер формирования сообщения)
-db_number = config.get("db_number") #  размещения тега длины
-offset_len = config.get("offset_len") # размещение тега триггера
-offset_trigger = config.get("offset_trigger") # размещение тега триггера
+#  номер дата блока
+db_number = config.get("db_number")
+# размещение тега триггера
+offset_len = config.get("offset_len")
+# размещение тега триггера
+offset_trigger = config.get("offset_trigger")
 
+# время опроса тегов
+time_tag = config.get("time_tag", 0.2)
+
+#print(f"{db_number} ; {offset_len}, {offset_trigger}")
 
 
 
