@@ -1,0 +1,23 @@
+#==[report]==
+# путь шаблона
+template_report = C:\Users\SCC\PycharmProjects\Protocol RAR\template\Report\templateReport.csv
+
+# готовые отчёты:
+dist_report_pdf = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\pdf
+dist_report_xlsx = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\xlsx
+
+#==PLC==
+plc_ip = 192.168.0.2
+rack = 0
+slot = 2
+retry_delay = 5
+
+db_number = 5
+
+offset_len = 0 # размещения тега длины
+offset_trigger = 4 # размещение тега триггера
+
+
+
+
+
