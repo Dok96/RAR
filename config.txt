@@ -10,7 +10,10 @@ dist_report_xlsx = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\xlsx
 plc_ip = 192.168.117.128
 rack = 0
 slot = 2
+
+#повторное подключение
 retry_delay = 5
+MAX_retry_delay = 100
 
 db_number = 7
 

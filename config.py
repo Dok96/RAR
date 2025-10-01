@@ -70,6 +70,7 @@ plc_ip = config.get("plc_ip")
 rack = config.get("rack")
 slot = config.get("slot")
 retry_delay = config.get("retry_delay", 5)
+MAX_retry_delay= config.get("MAX_retry_delay", 5)
 
 #==message (длина и тригер формирования сообщения)
 #  номер дата блока

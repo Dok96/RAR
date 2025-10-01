@@ -20,8 +20,12 @@ def main_task(plc_manager):
         length = plc_manager.get_length()
         trigger = plc_manager.get_trigger()
 
-        print(f"Длина : {length}, триггер : {trigger}")
-        time.sleep(3)
+        #print(f"Длина : {length}, триггер : {trigger}")
+        #time.sleep(3)
+
+        if trigger == True and not p1:
+            print(f"Длина : {length}, триггер : {trigger}")
+        p1=trigger
 
 if __name__ == "__main__":
     print("Запуск скрипта... Для остановки введите 'Y'.")

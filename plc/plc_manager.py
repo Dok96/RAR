@@ -4,13 +4,15 @@ import snap7
 from plc_read.plcReadLen import read_len
 from plc_read.plcReadTrig import read_trigger_def
 from plc_read.resetTrig import res_trigger
-from config import plc_ip, rack,slot, time_tag
+from config import plc_ip, rack,slot, time_tag, MAX_retry_delay,retry_delay
 
 class PlcManager:
     def __init__(self):
         self.ip = plc_ip  # Берём IP из config
         self.rack = rack  # Берём rack из config
         self.slot = slot  # Берём slot из config
+        self.MAX_retry_delay=MAX_retry_delay
+        self.retry_delay = retry_delay
         self.plc = snap7.client.Client()
         self.connected = False
         self.running = False
@@ -22,12 +24,20 @@ class PlcManager:
 
     def connect(self):
         """Подключается к ПЛК."""
-        try:
-            self.plc.connect(self.ip, self.rack, self.slot)
-            self.connected = True
-            print(f"✅ Подключено к ПЛК ({self.ip})")
-        except Exception as e:
-            print(f"❌ Ошибка подключения к ПЛК: {e}")
+        """Подключается к ПЛК с повторными попытками каждые 5 секунд."""
+        while self.running:  # Пока поток запущен
+            try:
+                self.plc = snap7.client.Client()  # Создаём новый объект Client
+                self.plc.connect(self.ip, self.rack, self.slot)
+                self.connected = True
+                print(f"✅ Подключено к ПЛК ({self.ip})")
+                self.retry_delay = retry_delay  # Сбрасываем задержку после успешного подключения
+                break # Выходим из цикла при успешном подключении
+            except Exception as e:
+                print(f"❌ Ошибка подключения к ПЛК: {e}. \n Повторная попытка через {self.retry_delay} секунд...")
+                time.sleep( self.retry_delay)  # Ждём 5 секунд перед следующей попыткой
+                self.retry_delay= min(self.retry_delay+10,self.MAX_retry_delay)
+
 
     def disconnect(self):
         """Отключается от ПЛК."""
@@ -40,9 +50,20 @@ class PlcManager:
 
     def read_data(self):
         """Читает длину провода и статус триггера."""
-        with self.lock:
-            self.length = read_len(self.plc)
-            self.trigger = read_trigger_def(self.plc)
+        try:
+            #проверяем соединение
+            if not self.plc.get_connected():
+                print("⚠️ Соединение с плк потеряно ")
+                self.connected=False
+                return
+
+            with self.lock:
+                self.length = read_len(self.plc)
+                self.trigger = read_trigger_def(self.plc)
+
+        except Exception as e:
+            print(f"Error : {e}")
+            self.connected = False  # Отмечаем, что соединение разорвано
 
     def reset_trigger(self):
         """Сбрасывает триггер."""
@@ -56,8 +77,12 @@ class PlcManager:
 
         try:
             while self.running:
-                self.read_data()
-                time.sleep(time_tag)  # Частота опроса ПЛК (5 Гц)
+                if not self.connected:
+                    print("⚠️ Соединение с ПЛК потеряно. Попытка переподключения...")
+                    self.connect()  # Переподключаемся, если соединение потеряно
+                else:
+                    self.read_data()
+                    time.sleep(time_tag)  # Частота опроса ПЛК (5 Гц)
         except Exception as e:
             print(f"❌ Ошибка в потоке чтения ПЛК: {e}")
         finally:
