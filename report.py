@@ -12,20 +12,33 @@ def main_task(plc_manager):
     Основной поток: выполняет задачи, пока stop_event не установлен.
     """
     print(f'plc_ip:{plc_ip}, slot:{slot}, rack {rack},'
-          f'\n db № {db_number} ,длина {offset_len} , треггер {offset_trigger}')
+          f'\n db № {db_number} : \n длина dbd{offset_len} ,\n триггер: dbx4.0,\n линия в работе: dbx4.1,'
+          f'\n запрос в ручном режиме dbx4.2')
 
     # получаем данные из скрипта plc_manager
     while not stop_event.is_set():  # Проверяем флаг
         # Получаем актуальные данные с ПЛК
         length = plc_manager.get_length()
-        trigger = plc_manager.get_trigger()
+        trigger = plc_manager.get_trigger()  # триггер формирования протокола
+        lineRun = plc_manager.get_line_run()  # триггер линия в работе
+        manReqProtocol = plc_manager.get_man_req_protocol() # триггер формирование протокола в ручном режиме
+
 
         #print(f"Длина : {length}, триггер : {trigger}")
         #time.sleep(3)
 
         if trigger == True and not p1:
-            print(f"Длина : {length}, триггер : {trigger}")
+            print(f"Длина : {length}, триггер : {trigger}, Run: : {lineRun}, manReq : {manReqProtocol}")
+
+            #сброс триггера
+            time.sleep(3)
+            plc_manager.reset_trigger()
+            plc_manager.lump_send_fault_plc()
+            plc_manager.spark_send_fault_plc()
+
+
         p1=trigger
+
 
 if __name__ == "__main__":
     print("Запуск скрипта... Для остановки введите 'Y'.")

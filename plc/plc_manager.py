@@ -4,6 +4,9 @@ import snap7
 from plc_read.plcReadLen import read_len
 from plc_read.plcReadTrig import read_trigger_def
 from plc_read.resetTrig import res_trigger
+from plc_read.plc_alarm_Lump import lump_send_fault_plc
+from plc_read.plc_alarm_Spark import spark_send_fault_plc
+
 from config import plc_ip, rack,slot, time_tag, MAX_retry_delay,retry_delay
 
 class PlcManager:
@@ -21,6 +24,8 @@ class PlcManager:
         # Актуальные данные
         self.length = 0.0
         self.trigger = False
+        self.lineRun=False
+        self.manReqProtocol=False
 
     def connect(self):
         """Подключается к ПЛК."""
@@ -59,7 +64,11 @@ class PlcManager:
 
             with self.lock:
                 self.length = read_len(self.plc)
-                self.trigger = read_trigger_def(self.plc)
+                trigger_report, lineRun, manReqProtocol  = read_trigger_def(self.plc)  # Получаем три значения
+                self.trigger =trigger_report
+                self.lineRun = lineRun
+                self.manReqProtocol = manReqProtocol
+
 
         except Exception as e:
             print(f"Error : {e}")
@@ -70,6 +79,18 @@ class PlcManager:
         with self.lock:
             res_trigger(self.plc)
 
+    # активировать тэг ошибки  по люмпу
+    def lump_send_fault_plc(self):
+
+        with self.lock:
+            lump_send_fault_plc(self.plc)
+
+    # активировать тэг ошибки  по spark
+    def spark_send_fault_plc(self):
+
+        with self.lock:
+           spark_send_fault_plc(self.plc)
+################################################################3
     def start(self):
         """Запускает цикл чтения данных с ПЛК."""
         self.running = True
@@ -101,3 +122,15 @@ class PlcManager:
         """Возвращает текущий статус триггера."""
         with self.lock:
             return self.trigger
+
+    def get_line_run(self):
+        """Возвращает текущий статус 'линия в работе'."""
+        with self.lock:
+            return self.lineRun
+
+    def get_man_req_protocol(self):
+        """Возвращает текущий статус 'формирование протокола в ручном режиме'."""
+        with self.lock:
+            return self.manReqProtocol
+
+
