@@ -5,7 +5,7 @@ from stopScript.stp import input_listener
 from plc.plc_manager import PlcManager  # Новый модуль для управления ПЛК
 
 
-from Lump.main_Lump import main_lump_func
+from Lump.Lump_main import main_lump_func
 
 
 # Настройка логирования
