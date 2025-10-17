@@ -1,10 +1,19 @@
 #==[report]==
-# путь шаблона
-template_report = C:\Users\SCC\PycharmProjects\Protocol RAR\template\Report\templateReport.csv
 
-# готовые отчёты:
+# ===готовые отчёты:===
 dist_report_pdf = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\pdf
-dist_report_xlsx = C:\Users\SCC\PycharmProjects\Protocol RAR\reportCpmplate\xlsx
+dist_report_xlsx = C:\Users\SCC\Desktop\rarTemplate\complate
+
+# === отчёт общий===
+template_report = C:\Users\SCC\Desktop\rarTemplate\template\TemplateReport.xlsx
+# шаблон для общего отчёта
+blank_report  = C:\Users\SCC\Desktop\rarTemplate\complate\TemplateReport.xlsx
+
+# ====отчёт Lump====
+#шаблон (для подмены)
+dist_template_Lump_report = C:\Users\SCC\Desktop\rarTemplate\template\LumpTemplate.xlsx
+#отчёт (текущий отчёт по дефектам Lump)
+dist_lump_report= C:\Users\SCC\Desktop\rarTemplate\lump_report\LumpReport.xlsx
 
 #==PLC==
 plc_ip = 192.168.117.128
@@ -26,6 +35,9 @@ offset_trigger = 4
 
 # время опроса тегов (секунды)
 time_tag =0.2
+
+
+
 
 
 

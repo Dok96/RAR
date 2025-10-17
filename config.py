@@ -27,7 +27,8 @@ def load_config(file_path):
                         value = float(value)
 
                         # Если значение является путем, заменяем обратные слеши на прямые
-                    if key in ["source_template_report", "", "",
+                    if key in ["dist_report_pdf", "dist_report_xlsx","template_report",
+                        "blank_report","template_Lump_report", "lump_report",
                                 "", "", "", ""]:
                         value = value.replace("\\", "/")
 
@@ -62,7 +63,11 @@ source_template_report = config.get("template_report")
 
 dist_report_pdf= config.get("dist_report_pdf") # путь для pdf
 dist_report_xlsx = config.get("dist_report_xlsx") # путь для xlsx
+template_report = config.get("template_report") # путь для  шаблона xlsx
+blank_report = config.get("blank_report") # путь загатовки  для  шаблона xlsx
 
+dist_template_Lump_report = config.get("dist_template_Lump_report") #шаблон Lump (для подмены)
+dist_lump_report = config.get("dist_lump_report") #отчёт (текущий отчёт по дефектам Lump)
 
 #==PLC==
 #==connect
